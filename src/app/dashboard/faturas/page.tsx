@@ -1,63 +1,43 @@
-import { createClient } from "@/lib/supabase/server";
-import { DollarSign, ExternalLink } from "lucide-react";
+import { Receipt, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
-export default async function ClientFaturasPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) return null;
-
-  const { data: invoices } = await supabase
-    .from('invoices')
-    .select('*')
-    .eq('client_id', user.id)
-    .order('created_at', { ascending: false });
-
+export default function FaturasPage() {
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Minhas Faturas</h1>
-        <p className="text-slate-400">Acompanhe seus pagamentos e mensalidades abertas.</p>
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">Financeiro</h1>
+          <p className="text-slate-400">Gerencie suas faturas, pagamentos e históricos.</p>
+        </div>
+        <Button variant="outline" className="bg-transparent border-slate-700 text-white hover:bg-slate-800">
+          <FileText className="w-4 h-4 mr-2" />
+          Ver Histórico Completo
+        </Button>
       </div>
 
-      <div className="grid gap-4">
-        {invoices?.map((invoice) => (
-          <div key={invoice.id} className="bg-slate-950 p-6 rounded-xl border border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-              <h3 className="font-bold text-lg text-slate-200">{invoice.title}</h3>
-              <p className="text-sm text-slate-400">Gerada em {new Date(invoice.created_at).toLocaleDateString('pt-BR')}</p>
-            </div>
-            
-            <div className="flex items-center gap-6">
-              <div className="text-right">
-                <span className="block text-2xl font-black text-emerald-400">
-                  R$ {invoice.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                </span>
-                <span className="text-sm text-slate-500 uppercase font-semibold">
-                  {invoice.status === 'paid' ? 'Pago' : invoice.status === 'cancelled' ? 'Cancelado' : 'Pendente'}
-                </span>
-              </div>
-              
-              {invoice.status === 'pending' && invoice.mp_payment_link && (
-                <Link href={invoice.mp_payment_link} target="_blank">
-                  <Button className="font-bold bg-emerald-500 hover:bg-emerald-600 text-white">
-                    Pagar Agora
-                    <ExternalLink className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
-              )}
-            </div>
-          </div>
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6">
+          <p className="text-slate-400 font-medium mb-1">A Vencer</p>
+          <p className="text-3xl font-bold text-white">R$ 0,00</p>
+        </div>
+        <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6">
+          <p className="text-slate-400 font-medium mb-1">Pagas (Mês)</p>
+          <p className="text-3xl font-bold text-emerald-400">R$ 0,00</p>
+        </div>
+        <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6">
+          <p className="text-slate-400 font-medium mb-1">Em Atraso</p>
+          <p className="text-3xl font-bold text-red-400">R$ 0,00</p>
+        </div>
+      </div>
 
-        {(!invoices || invoices.length === 0) && (
-          <div className="text-center py-12 text-slate-500 bg-slate-950/50 rounded-xl border border-slate-800/50">
-            <DollarSign className="w-12 h-12 mx-auto mb-3 opacity-20" />
-            <p>Você não possui nenhuma fatura pendente ou histórico de cobranças.</p>
-          </div>
-        )}
+      <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-12 flex flex-col items-center justify-center text-center">
+        <div className="w-16 h-16 bg-slate-800/50 rounded-full flex items-center justify-center mb-6">
+          <Receipt className="w-8 h-8 text-slate-500" />
+        </div>
+        <h3 className="text-xl font-bold text-white mb-2">Nenhuma fatura pendente</h3>
+        <p className="text-slate-400 max-w-md">
+          Você está em dia com todas as suas obrigações financeiras. Novas faturas aparecerão aqui.
+        </p>
       </div>
     </div>
   );

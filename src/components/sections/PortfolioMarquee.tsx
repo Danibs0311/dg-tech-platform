@@ -51,7 +51,7 @@ export function PortfolioMarquee() {
         <motion.div 
           className="flex gap-8 px-4 items-center"
           animate={{ x: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, ease: "linear", duration: 35 }}
+          transition={{ repeat: Infinity, ease: "linear", duration: 55 }}
           whileHover={{ animationPlayState: "paused" }} // Wait, Framer Motion doesn't use animationPlayState directly like this, but let's stick to basics
         >
           {/* We duplicate the array to create a seamless infinite loop */}

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Code2, Instagram, Linkedin, Twitter, Facebook } from 'lucide-react';
+import { Code2, Mail, Globe, Phone } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -19,7 +19,7 @@ export function Footer() {
             Ajudando empresas a crescer através da tecnologia, oferecendo soluções digitais modernas, inteligentes e escaláveis para o futuro.
           </p>
           <div className="flex gap-4 pt-2">
-            {[Instagram, Linkedin, Twitter, Facebook].map((Icon, i) => (
+            {[Mail, Globe, Phone].map((Icon, i) => (
               <a key={i} href="#" className="text-slate-400 hover:text-blue-400 transition-colors">
                 <Icon className="w-5 h-5" />
               </a>

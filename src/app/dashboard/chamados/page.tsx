@@ -1,66 +1,29 @@
-import { createClient } from "@/lib/supabase/server";
-import { LifeBuoy, PlusCircle } from "lucide-react";
+import { LifeBuoy, MessageSquarePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default async function ChamadosPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  const { data: tickets } = await supabase
-    .from("tickets")
-    .select("*")
-    .eq("client_id", user?.id)
-    .order("created_at", { ascending: false });
-
+export default function ChamadosPage() {
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Suporte e Chamados</h1>
-          <p className="text-muted-foreground">Abra tickets e acompanhe suas solicitações.</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">Suporte</h1>
+          <p className="text-slate-400">Acompanhe seus chamados de suporte técnico e manutenções.</p>
         </div>
-        <Button className="font-bold">
-          <PlusCircle className="w-4 h-4 mr-2" />
-          Novo Chamado
+        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium shadow-lg shadow-emerald-900/20">
+          <MessageSquarePlus className="w-4 h-4 mr-2" />
+          Abrir Chamado
         </Button>
       </div>
 
-      {(!tickets || tickets.length === 0) ? (
-        <div className="bg-card p-8 border rounded-xl shadow-sm text-center">
-          <LifeBuoy className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-          <h2 className="text-xl font-bold mb-2">Nenhum chamado aberto</h2>
-          <p className="text-muted-foreground">Você não possui tickets de suporte no momento.</p>
+      <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-12 flex flex-col items-center justify-center text-center">
+        <div className="w-16 h-16 bg-slate-800/50 rounded-full flex items-center justify-center mb-6">
+          <LifeBuoy className="w-8 h-8 text-slate-500" />
         </div>
-      ) : (
-        <div className="bg-card border rounded-xl shadow-sm overflow-hidden">
-          <table className="w-full text-sm text-left">
-            <thead className="bg-muted/50 text-muted-foreground uppercase">
-              <tr>
-                <th className="px-6 py-4 font-medium">Assunto</th>
-                <th className="px-6 py-4 font-medium">Status</th>
-                <th className="px-6 py-4 font-medium">Prioridade</th>
-                <th className="px-6 py-4 font-medium">Data</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {tickets.map((ticket) => (
-                <tr key={ticket.id} className="hover:bg-muted/30 transition-colors">
-                  <td className="px-6 py-4 font-medium">{ticket.subject}</td>
-                  <td className="px-6 py-4">
-                    <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-semibold uppercase">
-                      {ticket.status.replace('_', ' ')}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 uppercase text-xs font-semibold text-muted-foreground">{ticket.priority}</td>
-                  <td className="px-6 py-4 text-muted-foreground">
-                    {new Date(ticket.created_at).toLocaleDateString('pt-BR')}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+        <h3 className="text-xl font-bold text-white mb-2">Nenhum chamado aberto</h3>
+        <p className="text-slate-400 max-w-md mb-8">
+          Seu sistema está rodando perfeitamente. Se precisar de alguma ajuda técnica, nossa equipe está pronta para atender.
+        </p>
+      </div>
     </div>
   );
 }
